@@ -1,8 +1,10 @@
 package com.project1.tickettriage.service;
 
+import com.project1.tickettriage.dto.CreateTicketRequest;
+import com.project1.tickettriage.dto.TriageRequest;
+import com.project1.tickettriage.dto.TriageResponse;
 import com.project1.tickettriage.entity.Ticket;
 import com.project1.tickettriage.repository.TicketRepository;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,14 +14,27 @@ import java.util.Optional;
 @Service
 public class TicketService {
     private final TicketRepository ticketRepository;
+    private final TriageService triageService;
 
-    public TicketService(TicketRepository ticketRepository){
+    public TicketService(TicketRepository ticketRepository, TriageService triageService){
         this.ticketRepository=ticketRepository;
+        this.triageService = triageService;
     }
 
-    public Ticket createTicket(Ticket ticket){
-        ticket.setStatus("OPEN");
-        ticket.setCreatedAt(LocalDateTime.now());
+    public Ticket createTicket(CreateTicketRequest request){
+        TriageRequest triageRequest=new TriageRequest();
+        triageRequest.setTitle(request.getTitle());
+        triageRequest.setDescription(request.getDescription());
+
+        TriageResponse triageResponse=triageService.analyze(triageRequest);
+
+        Ticket ticket=new Ticket();
+        ticket.setTitle(request.getTitle());
+        ticket.setDescription(request.getDescription());
+        ticket.setStatus(triageResponse.getSuggestedStatus());
+        ticket.setCategory(triageResponse.getCategory());
+        ticket.setPriority(triageResponse.getPriority());
+
         return ticketRepository.save(ticket);
     }
 
@@ -27,7 +42,8 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
-    public Optional<Ticket> getTicketById(Long id){
-        return ticketRepository.findById(id);
+    public Ticket getTicketById(Long id) {
+        return ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found with id " + id));
     }
 }
