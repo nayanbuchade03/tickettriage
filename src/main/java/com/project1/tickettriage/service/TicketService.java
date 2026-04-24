@@ -7,9 +7,7 @@ import com.project1.tickettriage.entity.Ticket;
 import com.project1.tickettriage.repository.TicketRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TicketService {

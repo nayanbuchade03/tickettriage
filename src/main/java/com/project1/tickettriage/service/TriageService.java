@@ -8,6 +8,7 @@ import java.awt.*;
 
 @Service
 public class TriageService {
+
     public TriageResponse analyze(TriageRequest request){
         String combinedText=((request.getTitle()==null?"": request.getTitle())+" "
                 +(request.getDescription()==null?"": request.getDescription())).toLowerCase();

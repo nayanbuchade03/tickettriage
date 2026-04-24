@@ -3,6 +3,7 @@ package com.project1.tickettriage.controller;
 import com.project1.tickettriage.dto.TriageRequest;
 import com.project1.tickettriage.dto.TriageResponse;
 import com.project1.tickettriage.service.TriageService;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ public class TriageController {
         this.triageService = triageService;
     }
 
+    @PostMapping("/analyze")
     public TriageResponse analyze(@RequestBody TriageRequest request){
         return triageService.analyze(request);
     }

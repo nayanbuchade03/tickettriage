@@ -1,35 +1,42 @@
 package com.project1.tickettriage.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "tickets")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-
 public class Ticket {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
 
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    private String customerEmail;
+    @Column(nullable = false)
+    private String status = "OPEN";
 
-    private String status;
-
+    @Column
     private String category;
 
-    private String priority;
+    @Column
+    private String priority = "MEDIUM";
 
+    @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
 }
