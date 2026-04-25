@@ -13,12 +13,12 @@ import lombok.Setter;
 
 public class CreateTicketRequest {
 
-    @NotBlank(message = "title is required")
-    @Size(min = 5, max = 100, message = "title must be between 5 and 100 characters")
+    @NotBlank(message = "Title is required")
+    @Size(min = 1, max = 100, message = "Title must be 1–100 characters")
     private String title;
 
-    @NotBlank(message = "description is required")
-    @Size(min = 10, max = 1000, message = "description must be between 10 and 1000 characters")
+    @NotBlank(message = "Description is required")
+    @Size(min = 10, max = 5000, message = "Description must be 10–5000 characters")
     private String description;
 
 }

@@ -3,6 +3,7 @@ package com.project1.tickettriage.service;
 import com.project1.tickettriage.dto.CreateTicketRequest;
 import com.project1.tickettriage.dto.TriageRequest;
 import com.project1.tickettriage.dto.TriageResponse;
+import com.project1.tickettriage.dto.UpdateTicketStatusRequest;
 import com.project1.tickettriage.entity.Ticket;
 import com.project1.tickettriage.repository.TicketRepository;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,13 @@ public class TicketService {
     public Ticket getTicketById(Long id) {
         return ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found with id " + id));
+    }
+
+    public Ticket updateTicketStatus(Long id, UpdateTicketStatusRequest request) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found with id " + id));
+
+        ticket.setStatus(request.getStatus());
+        return ticketRepository.save(ticket);
     }
 }
